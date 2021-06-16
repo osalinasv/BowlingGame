@@ -35,8 +35,7 @@ namespace BowlingGame.Tests
             RollSpare();
             game.Roll(3);
 
-            // AssertGameScoreEquals(13);
-            Assert.Inconclusive();
+            AssertGameScoreEquals(13);
         }
 
         [TestMethod]
@@ -47,8 +46,7 @@ namespace BowlingGame.Tests
             game.Roll(3);
             game.Roll(0);
 
-            // AssertGameScoreEquals(16);
-            Assert.Inconclusive();
+            AssertGameScoreEquals(16);
         }
 
         [TestMethod]

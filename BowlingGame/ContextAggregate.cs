@@ -23,11 +23,19 @@ namespace BowlingGame
                     NumberOfRollsInCurrentFrame = 0;
                     FrameNumber++;
                     break;
+                case SpareBonusEarned _:
+                    SpareBonusPending = true;
+                    break;
+                case SpareBonusAssigned _:
+                    SpareBonusPending = false;
+                    break;
             }
         }
 
         public int FrameNumber { get; private set; }
         public int TotalPinsInCurrentFrame { get; set; }
         public int NumberOfRollsInCurrentFrame { get; set; }
+
+        public bool SpareBonusPending { get; private set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BowlingGame
@@ -14,6 +14,9 @@ namespace BowlingGame
         {
             EmitEvent(new Rolled { Pins = pins });
             var context = new ContextAggregate(events);
+
+            AssignRollAsBonusForPendingFrame(context, pins);
+            SetNextRollForBonusIfEarned(context);
 
             EndFrameIfNeededAndAddFrameScore(context, pins);
         }
@@ -38,6 +41,20 @@ namespace BowlingGame
                     FrameNumber = context.FrameNumber,
                     Pins = context.TotalPinsInCurrentFrame
                 });
+        }
+
+        private void SetNextRollForBonusIfEarned(ContextAggregate context)
+        {
+            if (context.FrameNumber >= 10) return;
+
+            if (context.TotalPinsInCurrentFrame == 10)
+                EmitEvent(new SpareBonusEarned());
+        }
+
+        private void AssignRollAsBonusForPendingFrame(ContextAggregate context, int pins)
+        {
+            if (context.SpareBonusPending)
+                EmitEvent(new SpareBonusAssigned { Pins = pins });
         }
 
         private void EmitEvent(Event @event)
