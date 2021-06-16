@@ -18,74 +18,86 @@ namespace BowlingGame.Tests
         [TestMethod]
         public void Game_Score_Should_Be_0_When_All_Rolls_Are_0()
         {
-            for (int i = 0; i < 20; i++)
-            {
-                game.Roll(0);
-            }
+            RollMany(20, 0);
 
-            // Assert.AreEqual(0, game.Score());
+            // AssertGameScoreEquals(0);
             Assert.Inconclusive();
         }
 
         [TestMethod]
         public void Game_Score_Should_Be_20_When_All_Rolls_Are_1()
         {
-            for (int i = 0; i < 20; i++)
-            {
-                game.Roll(1);
-            }
+            RollMany(20, 1);
 
-            // Assert.AreEqual(20, game.Score());
+            // AssertGameScoreEquals(20);
             Assert.Inconclusive();
         }
 
         [TestMethod]
         public void Game_Score_Should_Be_13_When_A_Spare_Is_Followed_By_A_3()
         {
-            game.Roll(6);
-            game.Roll(4);
-
+            RollSpare();
             game.Roll(3);
 
-            // Assert.AreEqual(13, game.Score());
+            // AssertGameScoreEquals(13);
             Assert.Inconclusive();
         }
 
         [TestMethod]
         public void Game_Score_Should_Be_16_When_A_Spare_Is_Followed_By_A_3_And_A_0()
         {
-            game.Roll(6);
-            game.Roll(4);
+            RollSpare();
 
             game.Roll(3);
             game.Roll(0);
 
-            // Assert.AreEqual(16, game.Score());
+            // AssertGameScoreEquals(16);
             Assert.Inconclusive();
         }
 
         [TestMethod]
         public void Game_Score_Should_Be_24_When_A_Strike_Is_Followed_By_A_3_And_A_4()
         {
-            game.Roll(10);
+            RollStrike();
 
             game.Roll(3);
             game.Roll(4);
 
-            // Assert.AreEqual(24, game.Score());
+            // AssertGameScoreEquals(24);
             Assert.Inconclusive();
         }
 
         [TestMethod]
         public void Game_Score_Should_Be_300_When_All_Rolls_Are_10()
         {
-            for (int i = 0; i < 20; i++)
-            {
-                game.Roll(10);
-            }
+            RollMany(20, 10);
 
-            // Assert.AreEqual(30, game.Score());
+            // AssertGameScoreEquals(300);
             Assert.Inconclusive();
+        }
+
+        private void AssertGameScoreEquals(int score)
+        {
+            Assert.AreEqual(score, game.Score());
+        }
+
+        private void RollMany(int rolls, int pins)
+        {
+            for (int i = 0; i < rolls; i++)
+            {
+                game.Roll(pins);
+            }
+        }
+
+        private void RollSpare()
+        {
+            game.Roll(6);
+            game.Roll(4);
+        }
+
+        private void RollStrike()
+        {
+            game.Roll(10);
         }
     }
 }
