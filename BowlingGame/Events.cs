@@ -17,6 +17,8 @@
         public int FrameNumber { get; set; }
     }
 
+    public class GameCompleted : Event { }
+
     public class SpareBonusEarned : Event { }
     public class SpareBonusAssigned : ScoreEvent { }
 

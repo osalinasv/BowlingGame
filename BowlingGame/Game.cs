@@ -9,6 +9,10 @@ namespace BowlingGame
         private readonly List<Event> events =
             new List<Event>();
 
+        // Simulated Event Bus
+        public delegate void GameEventHandler(object sender, Event e);
+        public event GameEventHandler GameEvent;
+
         // Command and Command handler at the same time for simplicity
         public void Roll(int pins)
         {
@@ -34,12 +38,17 @@ namespace BowlingGame
 
         private void EndFrameIfNeededAndAddFrameScore(ContextAggregate context, int pins)
         {
-            if (pins == 10 || context.NumberOfRollsInCurrentFrame == 2)
-                EmitEvent(new FrameCompleted
-                {
-                    FrameNumber = context.FrameNumber,
-                    Pins = context.TotalPinsInCurrentFrame
-                });
+            if (pins != 10 && context.NumberOfRollsInCurrentFrame != 2)
+                return;
+
+            EmitEvent(new FrameCompleted
+            {
+                FrameNumber = context.FrameNumber,
+                Pins = context.TotalPinsInCurrentFrame
+            });
+
+            if (context.FrameNumber >= 9)
+                EmitEvent(new GameCompleted());
         }
 
         private void SetNextRollForBonusIfEarned(ContextAggregate context, int pins)
@@ -67,6 +76,9 @@ namespace BowlingGame
         private void EmitEvent(Event @event)
         {
             events.Add(@event);
+
+            GameEventHandler gameEvent = GameEvent;
+            if (gameEvent != null) gameEvent(this, @event);
         }
     }
 }
