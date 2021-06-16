@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace BowlingGame
@@ -16,8 +16,9 @@ namespace BowlingGame
             var context = new ContextAggregate(events);
 
             AssignRollAsBonusForPendingFrame(context, pins);
-            SetNextRollForBonusIfEarned(context);
+            if (context.FrameNumber >= 10) return;
 
+            SetNextRollForBonusIfEarned(context, pins);
             EndFrameIfNeededAndAddFrameScore(context, pins);
         }
 
@@ -33,8 +34,6 @@ namespace BowlingGame
 
         private void EndFrameIfNeededAndAddFrameScore(ContextAggregate context, int pins)
         {
-            if (context.FrameNumber >= 10) return;
-
             if (pins == 10 || context.NumberOfRollsInCurrentFrame == 2)
                 EmitEvent(new FrameCompleted
                 {
@@ -43,11 +42,11 @@ namespace BowlingGame
                 });
         }
 
-        private void SetNextRollForBonusIfEarned(ContextAggregate context)
+        private void SetNextRollForBonusIfEarned(ContextAggregate context, int pins)
         {
-            if (context.FrameNumber >= 10) return;
-
-            if (context.TotalPinsInCurrentFrame == 10)
+            if (pins == 10)
+                EmitEvent(new StrikeBonusEarned());
+            else if (context.TotalPinsInCurrentFrame == 10)
                 EmitEvent(new SpareBonusEarned());
         }
 
@@ -55,6 +54,14 @@ namespace BowlingGame
         {
             if (context.SpareBonusPending)
                 EmitEvent(new SpareBonusAssigned { Pins = pins });
+            else if (context.StrikeBonusesPending == 1)
+                EmitEvent(new StrikeBonusAssigned { Pins = pins });
+            // This will handle both the first of the two strike bonuses and also
+            // strike bonus accumulation when multiple strikes happen one after another
+            else while (context.StrikeBonusesPending-- > 1)
+            {
+                EmitEvent(new StrikeBonusAssigned { Pins = pins });
+            }
         }
 
         private void EmitEvent(Event @event)

@@ -57,8 +57,7 @@ namespace BowlingGame.Tests
             game.Roll(3);
             game.Roll(4);
 
-            // AssertGameScoreEquals(24);
-            Assert.Inconclusive();
+            AssertGameScoreEquals(24);
         }
 
         [TestMethod]
@@ -66,8 +65,7 @@ namespace BowlingGame.Tests
         {
             RollMany(20, 10);
 
-            // AssertGameScoreEquals(300);
-            Assert.Inconclusive();
+            AssertGameScoreEquals(300);
         }
 
         private void AssertGameScoreEquals(int score)

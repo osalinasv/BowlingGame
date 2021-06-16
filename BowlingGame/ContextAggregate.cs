@@ -29,6 +29,12 @@ namespace BowlingGame
                 case SpareBonusAssigned _:
                     SpareBonusPending = false;
                     break;
+                case StrikeBonusEarned _:
+                    StrikeBonusesPending += 2;
+                    break;
+                case StrikeBonusAssigned _:
+                    StrikeBonusesPending -= 1;
+                    break;
             }
         }
 
@@ -36,6 +42,7 @@ namespace BowlingGame
         public int TotalPinsInCurrentFrame { get; set; }
         public int NumberOfRollsInCurrentFrame { get; set; }
 
+        public int StrikeBonusesPending { get; set; }
         public bool SpareBonusPending { get; private set; }
     }
 }

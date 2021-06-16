@@ -19,4 +19,7 @@
 
     public class SpareBonusEarned : Event { }
     public class SpareBonusAssigned : ScoreEvent { }
+
+    public class StrikeBonusEarned : Event { }
+    public class StrikeBonusAssigned : ScoreEvent { }
 }
