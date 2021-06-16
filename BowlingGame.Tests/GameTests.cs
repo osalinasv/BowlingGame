@@ -19,18 +19,14 @@ namespace BowlingGame.Tests
         public void Game_Score_Should_Be_0_When_All_Rolls_Are_0()
         {
             RollMany(20, 0);
-
-            // AssertGameScoreEquals(0);
-            Assert.Inconclusive();
+            AssertGameScoreEquals(0);
         }
 
         [TestMethod]
         public void Game_Score_Should_Be_20_When_All_Rolls_Are_1()
         {
             RollMany(20, 1);
-
-            // AssertGameScoreEquals(20);
-            Assert.Inconclusive();
+            AssertGameScoreEquals(20);
         }
 
         [TestMethod]
